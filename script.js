@@ -1,190 +1,294 @@
-/* Globals */
-var NUM_ROWS = 3,
-  	NUM_COLS = 3,
-  	NUM_SQUARES = NUM_ROWS * NUM_COLS,
-  	GAMEBOARD = new Array(NUM_SQUARES),
-    WIN_COMBOS = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],
-                  [1,4,7],[2,5,8],[0,4,8],[2,4,6]],
-  	MAX_DEPTH,
-  	AI_MOVE,
-    PLAYER_CLASS = 'cross',
-    COMPUTER_CLASS = 'nought',
-    RUNNING = false;
-
-$(document).ready(function() {
-	/* Start a new game */
-	new_game();
-
-  /* Settings cog clicked, show the settings menu */
-  $(".board__settings-cog").click(function() {
-    if ($(".board__settings").css('visibility') == 'hidden') {
-      $(".board__settings").css('visibility', 'visible');
-    } else {
-      $(".board__settings").css('visibility', 'hidden');
+(function Game() {
+    // Elements
+    var game = document.getElementById('game');
+    var boxes = document.querySelectorAll('li');
+    var resetGame = document.getElementById('reset-game');
+    var turnDisplay = document.getElementById('whos-turn');
+    var gameMessages = document.getElementById('game-messages');
+    var playerOneScoreCard = document.getElementById('player-one-score');
+    var playerTwoScoreCard = document.getElementById('player-two-score');
+    
+    // Vars
+    var context = { 'player1' : 'x', 'player2' : 'o' };
+    var board = [];
+    
+    var playerOneScore = 0;
+    var playerTwoScore = 0;
+    
+    var turns;
+    var currentContext;
+    
+    // Constructor
+    var init = function() {
+        turns = 0;
+        
+        // Get current context
+        currentContext = computeContext();
+        
+        // Setup 3 x 3 board 
+        board[0] = new Array(3);
+        board[1] = new Array(3);
+        board[2] = new Array(3);
+        
+        // bind events
+        for(var i = 0; i < boxes.length; i++) {
+            boxes[i].addEventListener('click', clickHandler, false);
+        }
+        
+        resetGame.addEventListener('click', resetGameHandler, false);
     }
-  });
-
-  /* Player class has been switched from the settings menu */
-  $(".board__settings__choice-cross").click(function() {
-    PLAYER_CLASS = 'cross';
-    COMPUTER_CLASS = 'nought';
-    $(".board__settings").css('visibility', 'hidden');
-    console.log('set class to cross');
-  });
-
-  $(".board__settings__choice-nought").click(function() {
-    PLAYER_CLASS = 'nought';
-    COMPUTER_CLASS = 'cross';
-    $(".board__settings").css('visibility', 'hidden');
-  });
-
-  /* Difficulty selected */
-  $("div[class*=board__difficulty__button]").click(function() {
-    var difficulty = $(this).attr("id");
-
-    if (difficulty === 'easy') MAX_DEPTH = 1;
-    else if (difficulty === 'medium') MAX_DEPTH = 3;
-    else MAX_DEPTH = 6;
-
-    $(".board__difficulty").removeClass('slideDown').addClass('slideUp');
-    new_game();
-
-  });
-
-	/* Process a square being clicked */
-  $(".board__slot").click(function() {
-    if (RUNNING) {
-  		var pos = Number($(this).attr("id"));
-
-  		/* If the square is empty, process the click */
-  		if (GAMEBOARD[pos] == "") {
-  			$(this).addClass(PLAYER_CLASS + ' player-color');
-  			GAMEBOARD[pos] = "X";
-
-  			if (full(GAMEBOARD)) {
-          RUNNING = false;
-  				$(".board__header-difficulty").html("It's a tie!");
-          $(".board__difficulty").removeClass('slideUp').addClass('slideDown');
-  			} else if (wins(GAMEBOARD, "X")) {
-          RUNNING = false;
-  				$(".board__header-difficulty").html("You win!");
-          $(".board__difficulty").removeClass('slideUp').addClass('slideDown');
-  			} else {
-  				minimax(GAMEBOARD, "O", 0);
-  				GAMEBOARD[AI_MOVE] = "O";
-  				$(".board__slot[id=" + AI_MOVE + "]").addClass(COMPUTER_CLASS + ' computer-color');
-
-  				if (wins(GAMEBOARD, "O")) {
-            RUNNING = false;
-  					$(".board__header-difficulty").html("You lost!");
-            $(".board__difficulty").removeClass('slideUp').addClass('slideDown');
-  				}
-  			}
-  		}
+    
+    //Keeps track of player's turn
+    var computeContext = function() {
+        return (turns % 2 == 0) ? context.player1 : context.player2;
     }
-	});
-});
+    
+    // Bind the dom element to the click callback
+    var clickHandler = function() {
+        this.removeEventListener('click', clickHandler);
+        
+        this.className = currentContext;
+        this.innerHTML = currentContext;
+        
+        var pos = this.getAttribute('data-pos').split(',');
+        board[pos[0]][pos[1]] = computeContext() == 'x' ? 1 : 0;
+        
+        if(checkStatus()) {
+            gameWon();
+        }
+        
+        turns++;
+        currentContext = computeContext();
+        turnDisplay.className = currentContext;
+    }
+    
+    
+    // Check to see if player has won
+    var checkStatus = function() {
+        var used_boxes = 0;
+        
+        for(var rows = 0; rows < board.length; rows++ ) {
+            var row_total = 0;
+            var column_total = 0;
+            
+            for(var columns = 0; columns < board[rows].length; columns++) {
+                row_total += board[rows][columns];
+                column_total += board[columns][rows];
+                
+                if(typeof board[rows][columns] !== "undefined") {
+                    used_boxes++;
+                }
+            }
+            
+            // Winning combination for diagonal scenario [0,4,8], [2,4,6]
+            var diagonal_tl_br = board[0][0] + board[1][1] + board[2][2]; // diagonal top left to bottom right
+            var diagonal_tr_bl = board[0][2] + board[1][1] + board[2][0]; // diagonal top right bottom left
+            
+            if(diagonal_tl_br == 0 || diagonal_tr_bl == 0 || diagonal_tl_br == 3 || diagonal_tr_bl == 3) {
+                return true;
+            }
+            
+            // Winning combination for row [0,1,2], [3,4,5], [6,7,8]
+            // Winning combination for column [0,3,6], [1,4,7], [2,5,8]
+            // Only way to win is if the total is 0 or if the total is 3. X are worth 1 point and O are worth 0 points
+            if(row_total == 0 || column_total == 0 || row_total == 3 || column_total == 3) {
+                return true;
+            }
+            
+            // if all boxes are full - Draw!!!
+            if(used_boxes == 9) {
+                gameDraw();
+            }
+        }
+    }
+    var gameWon = function() {
+        clearEvents();
+        
+        // show game won message
+        gameMessages.className = 'player-' + computeContext() + '-win';
+        
+        // update the player score
+        switch(computeContext()) {
+            case 'x':
+                playerOneScoreCard.innerHTML = ++playerOneScore;
+                break;
+            case 'o':
+                playerTwoScoreCard.innerHTML = ++playerTwoScore;
+        }
+    }
+    // Tells user when game is a draw.
+    var gameDraw = function() {
+        gameMessages.className = 'draw';
+        clearEvents();
+    }
+    
+    // Stops user from clicking empty cells after game is over
+    var clearEvents = function() {
+        for(var i = 0; i < boxes.length; i++) {
+            boxes[i].removeEventListener('click', clickHandler);
+        }
+    }
+    // Reset game to play again
+    var resetGameHandler = function() {
+        clearEvents();
+        init();
+        
+        // Go over all the li nodes and remove className of either x,o
+        // clear out innerHTML
+        for(var i = 0; i < boxes.length; i++) {
+            boxes[i].className = '';
+            boxes[i].innerHTML = '';
+        }
+        
+        // Change Who's turn class back to player1
+        turnDisplay.className = currentContext;
+        gameMessages.className = '';
+    }
+    
+    game && init();
+})();
 
-/* Starts a new game */
-function new_game() {
-	/* Clear the table */
-	$(".board__slot").each(function() {
-		$(this).removeClass(PLAYER_CLASS + ' player-color computer-color ' + COMPUTER_CLASS);
-	});
 
-	/* Clear the gameboard */
-	for (var i = 0; i < NUM_SQUARES; i++) {
-		GAMEBOARD[i] = "";
-	}
 
-  RUNNING = true;
-}
 
-/* For a given state of the board, returns all the available moves */
-function get_available_moves(state) {
-	var all_moves = Array.apply(null, {length: NUM_SQUARES}).map(Number.call, Number);
-	return all_moves.filter(function(i) { return state[i] == ""; });
-}
 
-/* Given a state of the board, returns true if the board is full */
-function full(state) {
-	return !get_available_moves(state).length;
-}
 
-/* Given a state of the board, returns true if the specified player has won */
-function wins(state, player) {
-	var win;
 
-	for (var i = 0; i < WIN_COMBOS.length; i++) {
-		win = true;
-		for (var j = 0; j < WIN_COMBOS[i].length; j++) {
-			if (state[WIN_COMBOS[i][j]] != player) {
-				win = false;
-			}
-		}
-		if (win) {
-			return true;
-		}
-	}
-	return false;
-}
 
-/* Given a state of the board, returns true if the board is full or a player has won */
-function terminal(state) {
-	return full(state) || wins(state, "X") || wins(state, "O");
-}
 
-/* Returns the value of a state of the board */
-function score(state) {
-	if (wins(state, "X")) {
-		return 10;
-	} else if (wins(state, "O")) {
-		return -10;
-	} else {
-		return 0;
-	}
-}
 
-/* Finds the optimal decision for the AI */
-function minimax(state, player, depth) {
-	if (depth >= MAX_DEPTH || terminal(state)) {
-		return score(state);
-	}
 
-	var max_score,
-		min_score,
-		scores = [],
-		moves = [],
-		opponent = (player == "X") ? "O" : "X",
-		successors = get_available_moves(state);
 
-	for (var s in successors) {
-		var possible_state = state;
-		possible_state[successors[s]] = player;
-		scores.push(minimax(possible_state, opponent, depth + 1));
-		possible_state[successors[s]] = "";
-		moves.push(successors[s]);
-	}
 
-	if (player == "X") {
-		AI_MOVE = moves[0];
-		max_score = scores[0];
-		for (var s in scores) {
-			if (scores[s] > max_score) {
-				max_score = scores[s];
-				AI_MOVE = moves[s];
-			}
-		}
-		return max_score;
-	} else {
-		AI_MOVE = moves[0];
-		min_score = scores[0];
-		for (var s in scores) {
-			if (scores[s] < min_score) {
-				min_score = scores[s];
-				AI_MOVE = moves[s];
-			}
-		}
-		return min_score;
-	}
-}
+
+
+
+
+
+
+
+
+
+
+
+// window.addEventListener("DOMContentLoaded", () => {
+//   const tiles = Array.from(document.querySelectorAll("tile"));
+//   const playerDisplay = document.querySelector(".display-player");
+//   const resetButton = document.querySelector("#reset");
+//   const announcer = document.querySelector(".announcer");
+
+//   let board = ['', '', '', '', '', '', '', '', ''];
+//   let currentPlayer = "X";
+//   let isGameActive = true;
+
+//   const PLAYERX_WON = "PLAYERX_WON";
+//   const PLAYERO_WON = "PLAYERO_WON";
+//   const TIE = "TIE";
+
+//   /*    
+//         Indexes within the board
+//         [0] [1] [2]
+//         [3] [4] [5]
+//         [6] [7] [8]
+//     */
+
+//   const winningConditions = [
+//     [0, 1, 2],
+//     [3, 4, 5],
+//     [6, 7, 8],
+//     [0, 3, 6],
+//     [1, 4, 7],
+//     [2, 5, 8],
+//     [0, 4, 8],
+//     [2, 4, 6]
+//   ];
+
+//   function handleResultValidation() {
+//     let roundWon = false;
+//     for (let i = 0; i <= 7; i++) {
+//       const winCondition = winningConditions[i];
+//       const a = board[winCondition[0]];
+//       const b = board[winCondition[1]];
+//       const c = board[winCondition[2]];
+//       if (a === "" || b === "" || c === "") {
+//         continue;
+//       }
+//       if (a === b && a === c) {
+//         roundWon = true;
+//         break;
+//       }
+//     }
+
+//     if (roundWon) {
+//       announce(currentPlayer === "X" ? PLAYERX_WON : PLAYERO_WON);
+//       isGameActive = false;
+//       return;
+//     }
+//     if (!board.includes("")) announce("TIE");
+//   }
+
+//   tiles.forEach((tile, index) => {
+//     tile.addEventListener("click", () => userAction(tile, index));
+//   });
+
+//   const announce = (type) => {
+//     switch (type) {
+//       case PLAYERO_WON:
+//         announcer.innerHTML = `Player <span class='PlayerO'>O</span> Won`;
+//         break;
+//       case PLAYERX_WON:
+//         announcer.innerHTML = `Player <span class='PlayerX'>X</span> Won`;
+//         break;
+//       case TIE:
+//         announcer.innerText = "It's A Tie";
+//     }
+//     announcer.classList.remove("hide");
+//   };
+
+//   const isValidAction = (tile) => {
+//     if (tile.innerText === 'X' || tile.innerText === 'O') {
+//         return false;
+//     }
+//     return true;
+//   };
+
+//   const updateBoard = (index) => {
+//     board[index] = currentPlayer;
+//   }
+
+//   const changePlayer = () => {
+//     playerDisplay.classList.remove(`player${currentPlayer}`);
+//     currentPlayer = currentPlayer === "X" ? "O" : "X";
+//     playerDisplay.innerText = currentPlayer;
+//     playerDisplay.classList.add(`player${currentPlayer}`);
+//   };
+
+//   // This block of code represents a players turn in the game
+//   const userAction = (tile, index) => {
+//     if (isValidAction(tile) && isGameActive) {
+//       tile.innerText = currentPlayer;
+//       tile.classList.add(`player${currentPlayer}`);
+//       updateBoard(index);
+//       handleResultValidation();
+//       changePlayer();
+//     }
+//   };
+
+//   const resetBoard = () => {
+//     board = ['', '', '', '', '', '', '', '', ''];
+//     isGameActive = true;
+//     announcer.classList.add('hide');
+
+//     if (currentPlayer === 'O') {
+//         changePlayer();
+//     }
+
+//     tiles.forEach(tile => {
+//         tile.innerText = '';
+//         tile.classList.remove(`PlayerX`);
+//         tile.classList.remove(`PlayerO`);
+//     });
+//   }
+
+//   resetButton.addEventListener("click", resetBoard);
+// });

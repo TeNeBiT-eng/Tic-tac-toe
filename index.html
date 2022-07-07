@@ -1,5 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Tic-Tac-Toe</h1>
+        <ul id="game">
+            <!-- first row -->
+            <li data-pos="0,0"></li>
+            <li data-pos="0,1"></li>
+            <li data-pos="0,2"></li>
+            <!-- second row -->
+            <li data-pos="1,0"></li>
+            <li data-pos="1,1"></li>
+            <li data-pos="1,2"></li>
+            <!-- third row -->
+            <li data-pos="2,0"></li>
+            <li data-pos="2,1"></li> 
+            <li data-pos="2,2"></li>
+        </ul>
+        
+        <button id="reset-game">Reset Game</button>
+        
+        <!-- Game Messages -->
+        <div id="game-messages">
+            <span class="player-x-win">Player One Wins</span>
+            <span class="player-o-win">Player Two Wins</span>
+            <span class="draw">Draw Game</span>
+        </div>
+        
+        <aside id="nfo">
+            <h2>Who's Turn</h2>
+            <div id="whos-turn" class="x">
+                <span class="x">Player 1</span>
+                <span class="o">Player 2</span>
+            </div>
+            
+            <h2>Score Card</h2>
+            <div id="score">
+                Player 1: <span id="player-one-score">0</span> <br />
+                Player 2: <span id="player-two-score">0</span> <br />
+            </div>
+        </aside>
+    </div>
+    <script src="./script.js" async defer></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -62,7 +195,7 @@
         <input class="board__slot-hidden" type="radio" />
         <label class="board__slot" id="8"></label>
       </div>
-    </div>
+    </div> -->
 
     <!-- <main class="background">
         <section class="title">
@@ -91,6 +224,6 @@
             <button id="reset">Reset</button>
         </section>
     </main> -->
-    <script src="./script.js" async defer></script>
+    <!-- <script src="./script.js" async defer></script>
   </body>
-</html>
+</html> -->

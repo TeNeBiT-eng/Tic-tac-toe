@@ -1,4 +1,126 @@
-@charset "UTF-8";
+body {
+    margin-top: 40px;
+    background-color: rgb(32, 32, 32);
+    background-image: url("https://janschreiber.github.io/img2/black-chalk.jpg");
+    color: #fff;
+    font-family: 'Indie Flower', 'Comic Sans', cursive;
+    font-weight: bold;
+    text-align:center;
+}
+
+h1 {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #f1f1f1
+    
+}
+.container {
+    margin: 0 auto;
+    max-width: 400px;
+}
+
+#game {
+    width: 300px;
+    height: 300px;
+    border: 1px solid #dadada;
+    margin: 0 auto;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+#game > li {
+    list-style: none;
+    float: left;
+    overflow: hidden;
+    text-decoration:none;
+    width: 100px;
+    height: 100px;
+    /* background: #f1f1f1; */
+    border: 1px solid #ccc;
+    border-right: 1px solid #fff;
+    cursor: pointer;
+    text-transform: uppercase;
+    text-align: center;
+    padding-top: 20px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#game > li.x {
+    font-size: 40px;
+    color: #ed4e6e
+}
+
+#game > li.o {
+    font-size: 40px;
+    color: #485b6e;
+}
+
+#game > li:hover {
+    background: #f9f9f9;
+}
+
+#game > li:active {
+    width: 100px;
+    height: 100px;
+    border: 0;
+}
+
+#nfo {
+    text-align:center;
+    margin-top: 10px;
+}
+
+#whos-turn > span,
+#game-messages > span {
+    display: none;
+}
+
+#whos-turn.x span.x,
+#whos-turn.o span.o, 
+#game-messages.player-x-win > span.player-x-win, 
+#game-messages.player-o-win > span.player-o-win,
+#game-messages.draw > span.draw {
+    display: block;
+    margin-top: 10px;
+}
+
+#reset-game {
+    text-align: center;
+        border: none;
+        padding: 0.6em 1.2em;
+        background: #ed4e6e;
+        color: #fff;
+        font-size: 1em;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        cursor: pointer;
+        display: inline-block;
+        margin: 3px 2px;
+        border-radius: 2px;
+}
+
+#reset-game:hover {
+        background: #2c3e52;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* @charset "UTF-8";
 @import url(https://fonts.googleapis.com/css?family=PT+Sans:400,700,300);
 body {
   font-family: Arial;
@@ -357,7 +479,7 @@ body {
   color: white;
 }
 
-/* Animations */
+
 .slideUp {
   animation: slideUp 1s ease-in-out;
   animation-fill-mode: forwards;
@@ -385,7 +507,7 @@ body {
   }
 }
 
-/* *{
+ *{
     padding: 0;
     margin: 0;
     font-family: 'Montserrat', sans-serif;
