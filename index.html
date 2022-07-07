@@ -1,19 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
-    <script src="./script.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
     />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer"
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     />
     <title>Tic-tac-toe</title>
-</head>
-<body>
-    <main class="background">
+  </head>
+  <body>
+    <div class="board__settings">
+      <i class="fa fa-cog board__settings-cog"></i>
+      <h1 class="board__header-settings">
+        Choose Player
+        <div class="board__row">
+          <div class="board__settings__choice-cross"></div>
+          <div class="board__settings__choice-nought"></div>
+        </div>
+      </h1>
+    </div>
+    <div class="board__difficulty">
+      <i class="fa fa-cog board__settings-cog"></i>
+      <h1 class="board__header-difficulty">Select Difficulty</h1>
+      <div class="board__difficulty__button-easy" id="easy">Easy</div>
+      <div class="board__difficulty__button-medium" id="medium">Medium</div>
+      <div class="board__difficulty__button-hard" id="hard">Hard</div>
+    </div>
+    <div class="board">
+      <div class="board__row">
+        <input class="board__slot-hidden" type="radio" />
+        <label class="board__slot" id="0"></label>
+        <input class="board__slot-hidden" type="radio" />
+        <label class="board__slot" id="1"></label>
+        <input class="board__slot-hidden" type="radio" />
+        <label class="board__slot" id="2"></label>
+      </div>
+      <div class="board__row">
+        <input class="board__slot-hidden" type="radio" />
+        <label class="board__slot" id="3"></label>
+        <input class="board__slot-hidden" type="radio" />
+        <label class="board__slot" id="4"></label>
+        <input class="board__slot-hidden" type="radio" />
+        <label class="board__slot" id="5"></label>
+      </div>
+      <div class="board__row">
+        <input class="board__slot-hidden" type="radio" />
+        <label class="board__slot" id="6"></label>
+        <input class="board__slot-hidden" type="radio" />
+        <label class="board__slot" id="7"></label>
+        <input class="board__slot-hidden" type="radio" />
+        <label class="board__slot" id="8"></label>
+      </div>
+    </div>
+
+    <!-- <main class="background">
         <section class="title">
             <h1>Tic-tac-toe</h1>
         </section>
@@ -39,8 +90,7 @@
         <section class="controls">
             <button id="reset">Reset</button>
         </section>
-    </main>
-
-    
-</body>
+    </main> -->
+    <script src="./script.js" async defer></script>
+  </body>
 </html>

@@ -1,4 +1,391 @@
-*{
+@charset "UTF-8";
+@import url(https://fonts.googleapis.com/css?family=PT+Sans:400,700,300);
+body {
+  font-family: Arial;
+  background-color: #bb4a9f;
+  background-image: -webkit-linear-gradient(
+    -320deg,
+    #bb4a9f 0%,
+    #e4e5d7 35%,
+    #bee8d7 65%,
+    #51c8c8 90%
+  );
+  background-image: linear-gradient(
+    50deg,
+    #bb4a9f 0%,
+    #e4e5d7 35%,
+    #bee8d7 65%,
+    #51c8c8 90%
+  );
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.board-default,
+.board__difficulty,
+.board__settings,
+.board {
+  width: 250px;
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+  text-align: center;
+  border-radius: 30px;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+.board-default:before,
+.board__difficulty:before,
+.board__settings:before,
+.board:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -15px;
+  left: -15px;
+  right: -15px;
+  bottom: -15px;
+  border-radius: 51px;
+  border: 15px solid rgba(0, 0, 0, 0.05);
+}
+@media (min-width: 450px) {
+  .board-default,
+  .board__difficulty,
+  .board__settings,
+  .board {
+    width: 400px;
+    height: 400px;
+  }
+}
+
+.board {
+  position: relative;
+  margin: 40px auto;
+}
+
+.board__wrapper {
+  display: inline-flex;
+}
+
+.board__row {
+  display: block;
+}
+
+.board__slot-hidden {
+  display: none;
+}
+
+.board__slot {
+  display: inline-block;
+  height: 60px;
+  width: 60px;
+  box-sizing: border-box;
+  position: relative;
+  cursor: pointer;
+  border-radius: 15px;
+  background-color: rgba(0, 0, 0, 0.15);
+  margin: 5px;
+}
+@media (min-width: 450px) {
+  .board__slot {
+    height: 110px;
+    width: 110px;
+    border-radius: 30px;
+  }
+}
+.board__slot:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.board__slot:active {
+  border: 2px solid rgba(0, 0, 0, 0.09);
+}
+
+.board__settings {
+  position: absolute;
+  margin: auto;
+  right: 0;
+  left: 0;
+  z-index: 3;
+  text-align: center;
+  visibility: hidden;
+  background-color: #dff4ef;
+}
+
+.board__settings-cog {
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  width: 30px;
+  font-size: 2em;
+  background-color: #e0f4ef;
+  border-radius: 50%;
+  border: 10px solid #e0f4ef;
+  cursor: pointer;
+  z-index: 9;
+  color: rgba(0, 0, 0, 0.5);
+}
+.board__settings-cog:hover {
+  box-shadow: 1px 1px 2px 5px rgba(0, 0, 0, 0.05);
+}
+.board__settings-cog:after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border-radius: 51px;
+  border: 3px solid rgba(0, 0, 0, 0.2);
+}
+
+.board__settings__choice,
+.board__settings__choice-nought,
+.board__settings__choice-cross {
+  display: inline-block;
+  height: 60px;
+  width: 60px;
+  box-sizing: border-box;
+  position: relative;
+  cursor: pointer;
+  border-radius: 15px;
+  background-color: rgba(0, 0, 0, 0.15);
+  margin: 5px;
+  z-index: 99;
+  padding-top: 8px;
+}
+@media (min-width: 450px) {
+  .board__settings__choice,
+  .board__settings__choice-nought,
+  .board__settings__choice-cross {
+    height: 110px;
+    width: 110px;
+    border-radius: 30px;
+  }
+}
+.board__settings__choice-cross {
+  font-size: 0.7em;
+}
+
+.board__settings__choice-nought {
+  font-size: 0.2em;
+}
+
+.board__settings__choice:hover,
+.board__settings__choice-cross:hover,
+.board__settings__choice-nought:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.board__settings__choice:active,
+.board__settings__choice-cross:active,
+.board__settings__choice-nought:active {
+  border: 2px solid rgba(0, 0, 0, 0.09);
+}
+
+.board__settings__choice-cross {
+  font-family: "FontAwesome";
+  font-size: 2.3em;
+  cursor: pointer;
+}
+@media (min-width: 450px) {
+  .board__settings__choice-cross {
+    font-size: 3em;
+    top: 15px;
+  }
+}
+.board__settings__choice-cross:before {
+  color: white;
+  content: "";
+}
+
+.board__settings__choice-nought {
+  font-family: "FontAwesome";
+  font-size: 2.3em;
+  cursor: pointer;
+}
+@media (min-width: 450px) {
+  .board__settings__choice-nought {
+    font-size: 2.8em;
+    top: 10px;
+  }
+}
+.board__settings__choice-nought:before {
+  color: white;
+  content: "";
+}
+
+.board__difficulty {
+  position: absolute;
+  margin: auto;
+  right: 0;
+  left: 0;
+  z-index: 2;
+  text-align: center;
+  background-color: rgba(223, 244, 239, 0.8);
+}
+
+.board__header,
+.board__header-difficulty,
+.board__header-settings {
+  font-family: "PT Sans", Arial, sans-serif;
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 1.5em;
+  position: absolute;
+  top: 20px;
+  left: 0;
+  right: 0;
+  text-transform: uppercase;
+}
+@media (min-width: 450px) {
+  .board__header,
+  .board__header-difficulty,
+  .board__header-settings {
+    font-size: 2em;
+  }
+}
+.board__difficulty__button,
+.board__difficulty__button-hard,
+.board__difficulty__button-medium,
+.board__difficulty__button-easy {
+  position: relative;
+  display: block;
+  margin: 10px auto;
+  padding: 5px;
+  font-family: "PT Sans", arial, sans-serif;
+  font-size: 1em;
+  width: 150px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  color: #000;
+  text-transform: uppercase;
+}
+.board__difficulty__button:before,
+.board__difficulty__button-hard:before,
+.board__difficulty__button-medium:before,
+.board__difficulty__button-easy:before,
+.board__difficulty__button:after,
+.board__difficulty__button-hard:after,
+.board__difficulty__button-medium:after,
+.board__difficulty__button-easy:after {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  transition: all 250ms ease-out;
+  bottom: 15px;
+  width: 50%;
+  height: 20%;
+  box-shadow: 0 10px 30px rgba(31, 31, 31, 0.5);
+}
+.board__difficulty__button:before,
+.board__difficulty__button-hard:before,
+.board__difficulty__button-medium:before,
+.board__difficulty__button-easy:before {
+  left: 8px;
+  transform: rotate(-3deg);
+}
+.board__difficulty__button:after,
+.board__difficulty__button-hard:after,
+.board__difficulty__button-medium:after,
+.board__difficulty__button-easy:after {
+  right: 8px;
+  transform: rotate(3deg);
+}
+.board__difficulty__button:hover,
+.board__difficulty__button-hard:hover,
+.board__difficulty__button-medium:hover,
+.board__difficulty__button-easy:hover {
+  border-color: transparent;
+  cursor: pointer;
+}
+.board__difficulty__button:hover:before,
+.board__difficulty__button-hard:hover:before,
+.board__difficulty__button-medium:hover:before,
+.board__difficulty__button-easy:hover:before,
+.board__difficulty__button:hover:after,
+.board__difficulty__button-hard:hover:after,
+.board__difficulty__button-medium:hover:after,
+.board__difficulty__button-easy:hover:after {
+  box-shadow: 0 15px 12px rgba(31, 31, 31, 0.7);
+}
+.board__difficulty__button-easy {
+  margin-top: 70px;
+}
+
+@media (min-width: 450px) {
+  .board__difficulty__button,
+  .board__difficulty__button-hard,
+  .board__difficulty__button-medium,
+  .board__difficulty__button-easy {
+    padding: 10px 40px;
+    font-size: 2em;
+    width: 200px;
+  }
+}
+
+.nought:before,
+.cross:before {
+  font-family: "FontAwesome";
+  font-size: 3em;
+  position: absolute;
+  top: 5px;
+  bottom: 0;
+  left: 0px;
+  right: 0px;
+  cursor: default;
+}
+@media (min-width: 450px) {
+  .nought:before,
+  .cross:before {
+    font-size: 5em;
+    top: 15px;
+  }
+}
+
+.nought:before {
+  content: "";
+}
+
+.cross:before {
+  content: "";
+}
+
+.computer-color {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.player-color {
+  color: white;
+}
+
+/* Animations */
+.slideUp {
+  animation: slideUp 1s ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+.slideDown {
+  animation: slideDown 1s ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-500px);
+  }
+}
+@keyframes slideDown {
+  0% {
+    transform: translateY(-500px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* *{
     padding: 0;
     margin: 0;
     font-family: 'Montserrat', sans-serif;
@@ -73,4 +460,4 @@
     font-size: 20px;
     margin-left: 1em;
     cursor: pointer;
-}
+} */
