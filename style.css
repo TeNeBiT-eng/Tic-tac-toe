@@ -5,7 +5,10 @@ body {
     color: #fff;
     font-family: 'Indie Flower', 'Comic Sans', cursive;
     font-weight: bold;
-    text-align:center;
+    /* text-align:center; */
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
 }
 
 h1 {
@@ -35,7 +38,6 @@ h1 {
     text-decoration:none;
     width: 100px;
     height: 100px;
-    /* background: #f1f1f1; */
     border: 1px solid #ccc;
     border-right: 1px solid #fff;
     cursor: pointer;
@@ -57,6 +59,7 @@ h1 {
 }
 
 #game > li:hover {
+    transition: all .5s ease;
     background: #f9f9f9;
 }
 
@@ -66,14 +69,32 @@ h1 {
     border: 0;
 }
 
+.resetBtn{
+    display: flex;
+    justify-content: center;
+}
+
 #nfo {
-    text-align:center;
     margin-top: 10px;
+}
+
+h2{
+    font-size: 2.2rem;
+}
+
+#whos-turn{
+    font-size: x-large;
 }
 
 #whos-turn > span,
 #game-messages > span {
     display: none;
+}
+
+#game-messages{
+    display: flex;
+    justify-content: center;
+    font-size: x-large;
 }
 
 #whos-turn.x span.x,
@@ -83,6 +104,10 @@ h1 {
 #game-messages.draw > span.draw {
     display: block;
     margin-top: 10px;
+}
+
+#score{
+    font-size: x-large;
 }
 
 #reset-game {
@@ -104,6 +129,14 @@ h1 {
         background: #2c3e52;
 }
 
+@media (min-width: 768px) {
+    #nfo{
+        position: absolute;
+        width: 21.3%;
+        top: 20%;
+        right: 10%;
+    }
+}
 
 
 
