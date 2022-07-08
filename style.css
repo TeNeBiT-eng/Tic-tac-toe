@@ -75,6 +75,7 @@ h1 {
 }
 
 #nfo {
+    text-align: center;
     margin-top: 10px;
 }
 
@@ -131,6 +132,7 @@ h2{
 
 @media (min-width: 768px) {
     #nfo{
+        text-align: start;
         position: absolute;
         width: 21.3%;
         top: 20%;
