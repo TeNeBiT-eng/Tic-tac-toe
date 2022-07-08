@@ -1,25 +1,25 @@
 (function Game() {
     // Elements
-    var game = document.getElementById('game');
-    var boxes = document.querySelectorAll('li');
-    var resetGame = document.getElementById('reset-game');
-    var turnDisplay = document.getElementById('whos-turn');
-    var gameMessages = document.getElementById('game-messages');
-    var playerOneScoreCard = document.getElementById('player-one-score');
-    var playerTwoScoreCard = document.getElementById('player-two-score');
+    let game = document.getElementById('game');
+    let boxes = document.querySelectorAll('li');
+    let resetGame = document.getElementById('reset-game');
+    let turnDisplay = document.getElementById('whos-turn');
+    let gameMessages = document.getElementById('game-messages');
+    let playerOneScoreCard = document.getElementById('player-one-score');
+    let playerTwoScoreCard = document.getElementById('player-two-score');
     
     // Vars
-    var context = { 'player1' : 'x', 'player2' : 'o' };
-    var board = [];
+    let context = { 'player1' : 'x', 'player2' : 'o' };
+    let board = [];
     
-    var playerOneScore = 0;
-    var playerTwoScore = 0;
+    let playerOneScore = 0;
+    let playerTwoScore = 0;
     
-    var turns;
-    var currentContext;
+    let turns;
+    let currentContext;
     
     // Constructor
-    var init = function() {
+    let init = function() {
         turns = 0;
         
         // Get current context
@@ -31,7 +31,7 @@
         board[2] = new Array(3);
         
         // bind events
-        for(var i = 0; i < boxes.length; i++) {
+        for(let i = 0; i < boxes.length; i++) {
             boxes[i].addEventListener('click', clickHandler, false);
         }
         
@@ -39,18 +39,18 @@
     }
     
     //Keeps track of player's turn
-    var computeContext = function() {
+    let computeContext = function() {
         return (turns % 2 == 0) ? context.player1 : context.player2;
     }
     
     // Bind the dom element to the click callback
-    var clickHandler = function() {
+    let clickHandler = function() {
         this.removeEventListener('click', clickHandler);
         
         this.className = currentContext;
         this.innerHTML = currentContext;
         
-        var pos = this.getAttribute('data-pos').split(',');
+        let pos = this.getAttribute('data-pos').split(',');
         board[pos[0]][pos[1]] = computeContext() == 'x' ? 1 : 0;
         
         if(checkStatus()) {
@@ -64,12 +64,12 @@
     
     
     // Check to see if player has won
-    var checkStatus = function() {
-        var used_boxes = 0;
+    let checkStatus = function() {
+        let used_boxes = 0;
         
-        for(var rows = 0; rows < board.length; rows++ ) {
-            var row_total = 0;
-            var column_total = 0;
+        for(let rows = 0; rows < board.length; rows++ ) {
+            let row_total = 0;
+            let column_total = 0;
             
             for(var columns = 0; columns < board[rows].length; columns++) {
                 row_total += board[rows][columns];
@@ -81,8 +81,8 @@
             }
             
             // Winning combination for diagonal scenario [0,4,8], [2,4,6]
-            var diagonal_tl_br = board[0][0] + board[1][1] + board[2][2]; // diagonal top left to bottom right
-            var diagonal_tr_bl = board[0][2] + board[1][1] + board[2][0]; // diagonal top right bottom left
+            let diagonal_tl_br = board[0][0] + board[1][1] + board[2][2]; // diagonal top left to bottom right
+            let diagonal_tr_bl = board[0][2] + board[1][1] + board[2][0]; // diagonal top right bottom left
             
             if(diagonal_tl_br == 0 || diagonal_tr_bl == 0 || diagonal_tl_br == 3 || diagonal_tr_bl == 3) {
                 return true;
@@ -101,7 +101,7 @@
             }
         }
     }
-    var gameWon = function() {
+    let gameWon = function() {
         clearEvents();
         
         // show game won message
@@ -117,25 +117,25 @@
         }
     }
     // Tells user when game is a draw.
-    var gameDraw = function() {
+    let gameDraw = function() {
         gameMessages.className = 'draw';
         clearEvents();
     }
     
     // Stops user from clicking empty cells after game is over
-    var clearEvents = function() {
-        for(var i = 0; i < boxes.length; i++) {
+    let clearEvents = function() {
+        for(let i = 0; i < boxes.length; i++) {
             boxes[i].removeEventListener('click', clickHandler);
         }
     }
     // Reset game to play again
-    var resetGameHandler = function() {
+    let resetGameHandler = function() {
         clearEvents();
         init();
         
         // Go over all the li nodes and remove className of either x,o
         // clear out innerHTML
-        for(var i = 0; i < boxes.length; i++) {
+        for(let i = 0; i < boxes.length; i++) {
             boxes[i].className = '';
             boxes[i].innerHTML = '';
         }
